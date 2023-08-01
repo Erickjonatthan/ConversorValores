@@ -1,13 +1,15 @@
+package br.com.empresa.dominio.modelo;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import org.json.JSONObject;
 
-public class App {
-    public static void main(String[] args) {
-        String moedas = "USD-BRL,EUR-BRL";
-        String url = "https://economia.awesomeapi.com.br/json/last/" + moedas;
+public class ConversorMoeda {
+
+    public double converte(String siglaOrigem, String siglaSaida) {
+        String url = "https://economia.awesomeapi.com.br/json/last/" + siglaOrigem + "-" + siglaSaida;
 
         try {
             // Faz a requisição para a API
@@ -27,20 +29,14 @@ public class App {
             // Converte a resposta em um objeto JSON
             JSONObject json = new JSONObject(sb.toString());
 
-            // Obtém as cotações das moedas
-            double usd = json.getJSONObject("USDBRL").getDouble("bid");
-            double eur = json.getJSONObject("EURBRL").getDouble("bid");
-    
-            // Exibe as cotações das moedas
-            System.out.println("USD: " + usd);
-            System.out.println("EUR: " + eur);
-            
-            // Converte 100 dólares em euros
-            double valorEmDolares = 100;
-            double valorEmEuros = valorEmDolares * usd / eur;
-            System.out.println(valorEmDolares + " dólares equivalem a " + valorEmEuros + " euros");
+            // Obtém a cotação da moeda
+            double valorSaida = json.getJSONObject(siglaOrigem + siglaSaida).getDouble("bid");
+            return  valorSaida;
+
         } catch (Exception e) {
             e.printStackTrace();
+            return 0.0;
         }
     }
+
 }
