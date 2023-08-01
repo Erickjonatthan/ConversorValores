@@ -36,7 +36,9 @@ public class ConversorMoedaGUI {
             public void keyTyped(KeyEvent e) {
                 char c = e.getKeyChar();
                 if (!(Character.isDigit(c) || c == KeyEvent.VK_BACK_SPACE || c == KeyEvent.VK_DELETE)) {
-                    e.consume();
+                    e.consume(); // Impede a inserção do caractere
+                    JOptionPane.showMessageDialog(null, "Valor inválido!", "Erro",
+                            JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -54,6 +56,21 @@ public class ConversorMoedaGUI {
                 double valorConvertido = valorParaConverter * conversorMoeda.converte(siglaOrigem, siglaSaida);
                 String resultadoFormatado = String.format("%.2f unidades de %s equivalem a %.2f unidades de %s",valorParaConverter, siglaOrigem, valorConvertido, siglaSaida);
                 labelResultado.setText(resultadoFormatado);
+                // Perguntar ao usuário se deseja continuar no programa
+                int resposta = JOptionPane.showConfirmDialog(null, "Deseja continuar no programa?", "Continuar?",
+                        JOptionPane.YES_NO_CANCEL_OPTION);
+                if (resposta == JOptionPane.YES_OPTION) {
+                    // Voltar ao menu principal
+                    labelResultado.setText(""); // Limpar o resultado
+                    // ... Código para retornar ao menu principal
+                } else if (resposta == JOptionPane.NO_OPTION) {
+                    // Mostrar mensagem "Programa finalizado"
+                    JOptionPane.showMessageDialog(null, "Programa finalizado", "Fim", JOptionPane.INFORMATION_MESSAGE);
+                    System.exit(0);
+                } else if (resposta == JOptionPane.CANCEL_OPTION) {
+                    // Mostrar mensagem "Programa concluído"
+                    JOptionPane.showMessageDialog(null, "Programa concluído", "Fim", JOptionPane.INFORMATION_MESSAGE);
+                }
             }
         });
 
